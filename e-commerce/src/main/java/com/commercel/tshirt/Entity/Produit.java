@@ -28,7 +28,6 @@ public class Produit {
     @Column(name = "url_image", nullable = false)
     @OrderColumn(name = "image_order")
     private List<String> imagesVitrine;
-
     @ManyToOne
     @JoinColumn(name = "categorie_id")
     private Categorie categorie;
