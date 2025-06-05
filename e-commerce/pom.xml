@@ -12,7 +12,7 @@
 	<artifactId>tshirt</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>tshirt</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Projet PID 2025 groupe 2 : creation site E-Commerce Tshirt </description>
 	<url/>
 	<licenses>
 		<license/>
@@ -63,6 +63,15 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
 		</dependency>
 	</dependencies>
 
