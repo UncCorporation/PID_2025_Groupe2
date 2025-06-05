@@ -7,6 +7,65 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 
+const renderSingleProduct = (id) =>{
+    console.log(`_______${id}_______`);
+    fetch(`/api/produits/${id}`)
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(product => {
+        console.log(product);
+        const productList = document.getElementById('product-list');
+        productList.replaceChildren();
+        const cardContainer = document.createElement('div');
+        cardContainer.className = 'pcard';
+        const divf = document.createElement('div');
+        divf.className = 'container-fliud';
+        const wrapper = document.createElement('div');
+        wrapper.className = 'wrapper row';
+        const preview = document.createElement('div');
+        preview.className = 'preview col-md-6';
+        const previewpic = document.createElement('div');
+        previewpic.className = 'preview-pic tab-content';
+        const imageUrl = product.miniatureUrl ? product.miniatureUrl : (product.imagesVitrine && product.imagesVitrine.length > 0 ? product.imagesVitrine[0] : 'placeholder.jpg');
+        const img = document.createElement('img');
+        img.src = imageUrl;
+        img.alt = `Image of ${product.nom}`;
+        previewpic.appendChild(img);
+        preview.appendChild(previewpic);
+
+        const details = document.createElement('div');
+        details.className = 'details col-md-6';
+        const title = document.createElement('h3');
+        title.className = 'product-title';
+        title.textContent = product.nom;
+        const description = document.createElement('p');
+        description.className = 'product-description';
+        description.textContent = product.description;
+        const price = document.createElement('h5');
+        price.className = 'price';
+        price.textContent = `${product.prix} €`;
+        details.appendChild(title);
+        details.appendChild(description);
+        details.appendChild(price);
+
+
+        wrapper.appendChild(preview);
+        wrapper.appendChild(details);
+        divf.appendChild(wrapper);
+        cardContainer.appendChild(divf);
+        productList.appendChild(cardContainer);
+    })
+    .catch(error => {
+        console.error('Error fetching product:', error);
+    });
+
+
+}
+
 const renderCardProduct = (product) => {
     const cardContainer = document.createElement('div');
     cardContainer.className = 'col mb-5';
@@ -35,8 +94,8 @@ const renderCardProduct = (product) => {
     pPrice.textContent = `${product.prix} €`;
 
     textBody.appendChild(h5);
-    textBody.appendChild(pDesc);
     textBody.appendChild(pPrice);
+    textBody.appendChild(pDesc);
 
     cardBody.appendChild(textBody);
 
@@ -51,6 +110,9 @@ const renderCardProduct = (product) => {
     cardContainer.addEventListener("mouseleave", function(){
         const description = document.getElementById(`desc-${product.id}`);
         description.style.display = 'none';
+    });
+    cardContainer.addEventListener("click", function(){
+      renderSingleProduct(product.id);
     });
     return cardContainer;
 }
