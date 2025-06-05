@@ -1,5 +1,4 @@
 package com.commercel.tshirt.Entity;
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
