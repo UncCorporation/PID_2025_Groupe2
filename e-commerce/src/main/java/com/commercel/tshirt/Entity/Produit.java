@@ -22,14 +22,14 @@ public class Produit {
     private Integer prix;
     private String marque;
     private String miniature;
+    private String couleur;
+    private String taille;
 
     @ElementCollection
     @CollectionTable(name = "produit_images_vitrine", joinColumns = @JoinColumn(name = "produit_id"))
-    @Column(name = "url_image")
+    @Column(name = "url_image", nullable = false)
+    @OrderColumn(name = "image_order")
     private List<String> imagesVitrine;
-
-    private String couleur;
-    private String taille;
 
     @ManyToOne
     @JoinColumn(name = "categorie_id")

@@ -2,6 +2,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Produit",
+            "request": "launch",
+            "mainClass": "com.commercel.tshirt.Entity.Produit",
+            "projectName": "tshirt"
+        },
+        {
+            "type": "java",
             "name": "Spring Boot-TshirtApplication<tshirt>",
             "request": "launch",
             "cwd": "${workspaceFolder}",
