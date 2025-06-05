@@ -54,32 +54,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
                             cardContainer.appendChild(productCard);
 
-                            productList.appendChild(cardContainer)
-
-                            /*productCard.className = 'product-card';
-
-                            const imageUrl = product.miniatureUrl ? product.miniatureUrl : (product.imagesVitrine && product.imagesVitrine.length > 0 ? product.imagesVitrine[0] : 'placeholder.jpg');
-
-                            const img = document.createElement('img');
-                            img.src = imageUrl;
-                            img.alt = `Image of ${product.nom}`;
-
-                            const h3 = document.createElement('h3');
-                            h3.textContent = product.nom;
-
-                            const pDesc = document.createElement('p');
-                            pDesc.textContent = product.description;
-
-                            const pPrice = document.createElement('p');
-                            pPrice.className = 'price';
-                            pPrice.textContent = `${product.prix} €`;
-
-                            productCard.appendChild(img);
-                            productCard.appendChild(h3);
-                            productCard.appendChild(pDesc);
-                            productCard.appendChild(pPrice);
-
-                            productList.appendChild(productCard);*/
+                            productList.appendChild(cardContainer);
                         } catch (e) {
                             console.error(`Erreur lors du traitement du produit à l'index ${index}:`, product, e);
                         }
