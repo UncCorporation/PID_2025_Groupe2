@@ -14,14 +14,13 @@ import java.util.List;
 public class Produit {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     private String nom;
     private String description;
     private Integer prix;
     private String marque;
-    private String miniature;
+    private Integer miniatureImageIndex;
     private String couleur;
     private String taille;
 
@@ -35,4 +34,14 @@ public class Produit {
     @JoinColumn(name = "categorie_id")
     private Categorie categorie;
 
+    @Transient
+    public String getMiniatureUrl() {
+        if (imagesVitrine != null && !imagesVitrine.isEmpty() && miniatureImageIndex != null &&
+                miniatureImageIndex >= 0 && miniatureImageIndex < imagesVitrine.size()) {
+            return imagesVitrine.get(miniatureImageIndex);
+        }
+        // Consider returning a default placeholder URL or throwing an exception
+        // if a valid miniature cannot be determined based on business rules.
+        return null;
+    }
 }

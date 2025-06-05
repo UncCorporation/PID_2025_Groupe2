@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>T-Shirt Shop</title>
+    <style>
+        body {
+            font-family: sans-serif;
+        }
+        .product-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+        .product-card {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 16px;
+            width: 250px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .product-card img {
+            max-width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+        .product-card h3 {
+            margin: 10px 0 5px;
+        }
+        .product-card p {
+            margin: 0 0 10px;
+            font-size: 0.9em;
+            color: #555;
+        }
+        .product-card .price {
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>Our Products</h1>
+    <div id="product-list" class="product-list">
+        <!-- Products will be loaded here by JavaScript -->
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch('/api/produits')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(products => {
+                    console.log(`Number of products: ${products.length}`);
+                    products.forEach(product => {
+                        console.log(`Product title: ${product.nom}`);
+                    });
+                    const productList = document.getElementById('product-list');
+                    if (products.length === 0) {
+                        productList.innerHTML = '<p>No products found.</p>';
+                        return;
+                    }
+
+                    products.forEach((product, index) => {
+                        try {
+                            const productCard = document.createElement('div');
+                            productCard.className = 'product-card';
+
+                            const imageUrl = product.miniatureUrl ? product.miniatureUrl : (product.imagesVitrine && product.imagesVitrine.length > 0 ? product.imagesVitrine[0] : 'placeholder.jpg');
+
+                            const img = document.createElement('img');
+                            img.src = imageUrl;
+                            img.alt = `Image of ${product.nom}`;
+
+                            const h3 = document.createElement('h3');
+                            h3.textContent = product.nom;
+
+                            const pDesc = document.createElement('p');
+                            pDesc.textContent = product.description;
+
+                            const pPrice = document.createElement('p');
+                            pPrice.className = 'price';
+                            pPrice.textContent = `${product.prix} €`;
+
+                            productCard.appendChild(img);
+                            productCard.appendChild(h3);
+                            productCard.appendChild(pDesc);
+                            productCard.appendChild(pPrice);
+
+                            productList.appendChild(productCard);
+                        } catch (e) {
+                            console.error(`Erreur lors du traitement du produit à l'index ${index}:`, product, e);
+                        }
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching products:', error);
+                    const productList = document.getElementById('product-list');
+                    productList.innerHTML = '<p>Error loading products. Please try again later.</p>';
+                });
+        });
+    </script>
+</body>
+</html>
