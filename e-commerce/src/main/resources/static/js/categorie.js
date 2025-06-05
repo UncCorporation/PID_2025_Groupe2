@@ -27,6 +27,8 @@ const renderCardProduct = (product) => {
 
     const pDesc = document.createElement('p');
     pDesc.textContent = product.description;
+    pDesc.style.display = 'none';
+    pDesc.id = `desc-${product.id}`;
 
     const pPrice = document.createElement('p');
     pPrice.className = 'price';
@@ -42,6 +44,14 @@ const renderCardProduct = (product) => {
     productCard.appendChild(cardBody);
 
     cardContainer.appendChild(productCard);
+    cardContainer.addEventListener("mouseover", function(){
+        const description = document.getElementById(`desc-${product.id}`);
+        description.style.display = 'block';
+    });
+    cardContainer.addEventListener("mouseleave", function(){
+        const description = document.getElementById(`desc-${product.id}`);
+        description.style.display = 'none';
+    });
     return cardContainer;
 }
 
