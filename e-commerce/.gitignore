@@ -31,3 +31,9 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Fichiers de configuration locaux et sensibles
+application-local.properties
+application-dev.properties # Si chaque dev a un "dev" mais avec des configs différentes
+config/override.properties
+secrets.properties
