@@ -21,7 +21,7 @@
         <div class="category-card" th:each="categorie : ${categories}">
             <div class="card-image" th:classappend="${categorie.thumbnail == null} ? 'no-thumbnail'">
                 <img th:if="${categorie.thumbnail != null}" th:src="${categorie.thumbnail}" alt="Image de la catégorie">
-                <span th:if="${categorie.thumbnail == null}">Image non disponible</span>
+                <span th:if="${categorie.thumbnail == null}">Image non disponible </span>
             </div>
             <div class="card-body">
                 <h3 class="card-title" th:text="${categorie.nom}"></h3>
