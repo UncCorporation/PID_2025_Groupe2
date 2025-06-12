@@ -1,5 +1,9 @@
 HELP.md
 target/
+pom.xml
+nbactions.xml
+src/
+e-commerce/target/
 .mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
@@ -18,6 +22,10 @@ target/
 *.iws
 *.iml
 *.ipr
+e-commerce/.idea
+e-commerce/*.iws
+e-commerce/*.iml
+e-commerce/*.ipr
 
 ### NetBeans ###
 /nbproject/private/
@@ -30,8 +38,8 @@ build/
 !**/src/test/**/build/
 
 ### VS Code ###
-/.vscode/
 .vscode/
+/e-commerce/.vscode/
 !**/vscode/**
 
 # Fichiers de configuration locaux et sensibles
