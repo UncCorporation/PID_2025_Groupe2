@@ -4,39 +4,67 @@
     <meta charset="UTF-8">
     <title>Connexion</title>
     <!-- Mettez ici votre lien vers Bootstrap CSS si vous l'utilisez -->
-    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style>
+        .form-signin{
+            width: 100%;
+            max-width: 420px;
+            padding: 15px;
+            margin: 0 auto;
+        }
+        .form-label-group {
+            position: relative;
+            margin-bottom: 1rem;
+        }
+        .form-label-group > label {
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: block;
+            width: 100%;
+            margin-bottom: 0;
+            padding-left: 10px;
+            line-height: 1.5;
+            color: #495057;
+            border: 1px solid transparent;
+            border-radius: .25rem;
+            transition: all .1s ease-in-out;
+        }
+    </style>
 </head>
 <body>
 <div class="container">
-    <h2>Page de Connexion</h2>
-    <p>TRACE: Si vous voyez cette page, le contrôleur et la vue fonctionnent.</p>
 
-    <!-- Affiche un message d'erreur si la connexion échoue -->
-    <div th:if="${param.error}" class="alert alert-danger">
-        Email ou mot de passe invalide.
-    </div>
 
-    <!-- Affiche un message si l'utilisateur vient de se déconnecter -->
-    <div th:if="${param.logout}" class="alert alert-success">
-        Vous avez été déconnecté avec succès.
-    </div>
+    <form th:action="@{/login}" method="post" class="form-signin">
+        <div class="text-center mb-4">
+            <h2>Page de Connexion</h2>
 
-    <form th:action="@{/login}" method="post">
-        <div>
-            <label for="username">Email:</label>
-            <input type="text" id="username" name="username" autofocus="autofocus" required>
+            <!-- Affiche un message d'erreur si la connexion échoue -->
+            <div th:if="${param.error}" class="alert alert-danger">
+                Email ou mot de passe invalide.
+            </div>
+
+            <!-- Affiche un message si l'utilisateur vient de se déconnecter -->
+            <div th:if="${param.logout}" class="alert alert-success">
+                Vous avez été déconnecté avec succès.
+            </div>
         </div>
-        <div>
-            <label for="password">Mot de passe:</label>
-            <input type="password" id="password" name="password" required>
+        <div class="form-label-group">
+            <label for="username">Email</label>
+            <input type="text" id="username" name="username" autofocus="autofocus" class="form-control" required>
+        </div>
+        <div  class="form-label-group">
+            <label for="password">Mot de passe</label>
+            <input type="password" id="password" name="password" class="form-control" required>
         </div>
         
         <!-- Le jeton CSRF est ajouté automatiquement par Thymeleaf et Spring Security -->
         
-        <button type="submit">Se connecter</button>
+        <button type="submit" class="btn btn-lg btn-primary btn-block">Se connecter</button>
+
+        <a th:href="@{/register}">Créer un compte</a>
     </form>
-    
-    <a th:href="@{/register}">Créer un compte</a>
 </div>
 </body>
 </html> 
