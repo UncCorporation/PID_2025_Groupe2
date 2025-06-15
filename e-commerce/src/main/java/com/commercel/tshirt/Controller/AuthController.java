@@ -21,4 +21,10 @@ public class AuthController {
         log.warn("TRACE: Reached AuthController to serve the access-denied page.");
         return "access-denied"; // Assumes you have an access-denied.html
     }
+
+    @GetMapping("/register")
+    public String showRegisterPage() {
+        log.info("TRACE: Reached AuthController to serve the custom register page at /register");
+        return "register"; // This returns the templates/login.html view
+    }
 }
