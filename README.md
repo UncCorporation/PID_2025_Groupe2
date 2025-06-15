@@ -7,6 +7,9 @@
 - ✅ Tâche terminée
 - ❌ Tâche non terminée
 ---  
+## idées de suppléments s'il y a le temps 💡 :
+- Affichage custom IA de ton produit => voir son exemple avec gemini pour personnalisé des images : https://www.youtube.com/watch?v=HJa8G6e1oRw
+
 ## Visiteur / Navigation 
 
 ### US1 - Affichage des catégories ✅
