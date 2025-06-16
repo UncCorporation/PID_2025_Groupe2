@@ -1,15 +1,21 @@
 package com.commercel.tshirt.runner;
 
+import com.commercel.tshirt.Entity.Adresse;
 import com.commercel.tshirt.Entity.Categorie;
 import com.commercel.tshirt.Entity.Produit;
+import com.commercel.tshirt.Entity.Role;
+import com.commercel.tshirt.Entity.User;
 import com.commercel.tshirt.Repository.CategorieRepository;
 import com.commercel.tshirt.Repository.ProduitRepository;
+import com.commercel.tshirt.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +29,12 @@ public class DataInitializationRunner implements CommandLineRunner {
 
         @Autowired
         private CategorieRepository categorieRepository;
+
+        @Autowired
+        private UserRepository userRepository;
+
+        @Autowired
+        private PasswordEncoder passwordEncoder;
 
         private static class TempProduitData {
                 Integer categorieId, id, prix, miniatureImageIndex;
@@ -49,6 +61,50 @@ public class DataInitializationRunner implements CommandLineRunner {
         public void run(String... args) throws Exception {
                 System.out.println("Executing DataInitializationRunner...");
 
+                createInitialUsers();
+                createInitialProducts();
+        }
+
+        private void createInitialUsers() {
+                if (userRepository.count() == 0) {
+                        System.out.println("No users found, creating initial admin and test user...");
+
+                        // Admin User
+                        User admin = new User();
+                        admin.setNom("Admin");
+                        admin.setPrenom("Super");
+                        admin.setEmail("admin@tshirt.com");
+                        admin.setMotDePasse(passwordEncoder.encode("adminPsw123!"));
+                        admin.setRole(Role.ROLE_ADMIN);
+                        userRepository.save(admin);
+
+                        // Test User
+                        User testUser = new User();
+                        testUser.setNom("User");
+                        testUser.setPrenom("Test");
+                        testUser.setEmail("user@tshirt.com");
+                        testUser.setMotDePasse(passwordEncoder.encode("sUperUserPsw123"));
+                        testUser.setRole(Role.ROLE_CLIENT);
+
+                        // Create and set address for test user
+                        Adresse adresse = new Adresse();
+                        adresse.setRue("12 rue de Paris");
+                        adresse.setCodePostal("75001");
+                        adresse.setVille("Paris");
+                        adresse.setPays("France");
+                        adresse.setLibelle("Résidence");
+                        adresse.setUser(testUser);
+
+                        testUser.setAdresses(Collections.singletonList(adresse));
+                        userRepository.save(testUser);
+
+                        System.out.println("Initial users created.");
+                } else {
+                        System.out.println("Users already exist. Skipping creation.");
+                }
+        }
+
+        private void createInitialProducts() {
                 if (produitRepository.count() == 0) {
                         System.out.println("No products found, populating initial data...");
 

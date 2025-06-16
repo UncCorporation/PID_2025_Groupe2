@@ -43,6 +43,13 @@ build/
 /e-commerce/.vscode/
 !**/vscode/**
 
+
+### Cursor ###
+.cursor/
+/e-commerce/.cursor/
+!**/cursor/**
+
+
 # Fichiers de configuration locaux et sensibles
 application-local.properties
 application-dev.properties # Si chaque dev a un "dev" mais avec des configs différentes

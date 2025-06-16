@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Inscription - Test</title>
+</head>
+<body>
+
+    <h1>Page d'inscription de test</h1>
+
+    <form id="registration-form" method="post">
+        <!-- Champ CSRF crucial pour la sécurité -->
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" id="csrf-token"/>
+
+        <div>
+            <label for="prenom">Prénom:</label>
+            <input type="text" id="prenom" name="prenom">
+            <span id="error-prenom" style="color:red; font-size: 0.8em;"></span>
+        </div>
+        <br>
+        <div>
+            <label for="nom">Nom:</label>
+            <input type="text" id="nom" name="nom">
+            <span id="error-nom" style="color:red; font-size: 0.8em;"></span>
+        </div>
+        <br>
+        <div>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email">
+            <span id="error-email" style="color:red; font-size: 0.8em;"></span>
+        </div>
+        <br>
+        <div>
+            <label for="motDePasse">Mot de passe:</label>
+            <input type="password" id="motDePasse" name="motDePasse">
+            <span id="error-motDePasse" style="color:red; font-size: 0.8em;"></span>
+        </div>
+        <br>
+        <hr>
+        <h3>Adresse</h3>
+        <div>
+            <label for="adresse.rue">Rue:</label>
+            <input type="text" id="adresse.rue" name="adresse.rue">
+            <span id="error-adresse.rue" style="color:red; font-size: 0.8em;"></span>
+        </div>
+        <br>
+        <div>
+            <label for="adresse.codePostal">Code Postal:</label>
+            <input type="text" id="adresse.codePostal" name="adresse.codePostal">
+            <span id="error-adresse.codePostal" style="color:red; font-size: 0.8em;"></span>
+        </div>
+        <br>
+        <div>
+            <label for="adresse.ville">Ville:</label>
+            <input type="text" id="adresse.ville" name="adresse.ville">
+            <span id="error-adresse.ville" style="color:red; font-size: 0.8em;"></span>
+        </div>
+        <br>
+        <div>
+            <label for="adresse.pays">Pays:</label>
+            <input type="text" id="adresse.pays" name="adresse.pays" value="France">
+            <span id="error-adresse.pays" style="color:red; font-size: 0.8em;"></span>
+        </div>
+        <br>
+        <div>
+            <label for="adresse.libelle">Libellé:</label>
+            <input type="text" id="adresse.libelle" name="adresse.libelle" value="Principale">
+        </div>
+        <br>
+        <button type="submit">S'inscrire</button>
+    </form>
+
+    <div id="response-message" style="margin-top: 20px; font-weight: bold;"></div>
+
+    <!-- Il faut inclure jQuery pour que le script fonctionne. On utilise un CDN pour simplifier. -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <script>
+    $(document).ready(function() {
+        $('#registration-form').on('submit', function(e) {
+            e.preventDefault(); // Empêche la soumission classique
+
+            // Vide les anciens messages
+            $('span[id^="error-"]').text('');
+            $('#response-message').text('');
+
+            const formData = {
+                prenom: $('#prenom').val(),
+                nom: $('#nom').val(),
+                email: $('#email').val(),
+                motDePasse: $('#motDePasse').val(),
+                adresse: {
+                    rue: $('#adresse\\.rue').val(),
+                    codePostal: $('#adresse\\.codePostal').val(),
+                    ville: $('#adresse\\.ville').val(),
+                    pays: $('#adresse\\.pays').val(),
+                    libelle: $('#adresse\\.libelle').val()
+                }
+            };
+
+            const csrfToken = $('#csrf-token').val();
+            const csrfHeader = 'X-CSRF-TOKEN';
+
+            $.ajax({
+                type: 'POST',
+                url: '/register',
+                contentType: 'application/json',
+                data: JSON.stringify(formData),
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader(csrfHeader, csrfToken);
+                },
+                success: function(response) {
+                    $('#response-message').css('color', 'green').text('Inscription réussie! Vous pouvez maintenant vous connecter.');
+                    $('#registration-form')[0].reset(); // Vide le formulaire
+                },
+                error: function(xhr) {
+                    $('#response-message').css('color', 'red').text('Erreur lors de l\'inscription.');
+                    if (xhr.responseJSON) {
+                        const errors = xhr.responseJSON;
+                        $.each(errors, function(key, value) {
+                            // Remplace le point dans les clés comme "adresse.rue" pour que le sélecteur jQuery fonctionne
+                            $('#error-' + key.replace('.', '\\.')).text(value);
+                        });
+                    }
+                }
+            });
+        });
+    });
+    </script>
+</body>
+</html> 

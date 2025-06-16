@@ -2,12 +2,13 @@ package com.commercel.tshirt.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 
 @Configuration
 @EnableWebSecurity
@@ -35,45 +36,71 @@ public class SecurityConfig {
         @Bean
         public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
                 http
-                                // Configure authorization rules
+                                // Le CSRF est maintenant ACTIVÉ par défaut.
+                                // C'est crucial pour la sécurité de notre application stateful.
+
                                 .authorizeHttpRequests(authz -> authz
-                                                // Public resources that everyone can access
-                                                .requestMatchers(
-                                                                "/js/**",
-                                                                "/css/**",
-                                                                "/images/**",
-                                                                "/webjars/**")
+                                                // Définition des endpoints publics.
+                                                // Nous devons autoriser explicitement les ressources statiques.
+                                                .requestMatchers("/", "/login", "/logout", "/auth/register",
+                                                                "/access-denied",
+                                                                "/api/produits/**", "/api/categories/**",
+                                                                "/css/**", "/js/**", "/images/**",
+                                                                "/register")
                                                 .permitAll()
-                                                // Public pages AND the public API endpoints they call
-                                                .requestMatchers("/", "/produits/**", "/categories/**",
-                                                                "/api/produits/**", "/api/categories/**")
-                                                .permitAll()
-                                                // Registration and login endpoints must be public
-                                                .requestMatchers("/register", "/login").permitAll()
-                                                // Secure admin area
-                                                .requestMatchers("/admin/**").hasRole("ADMIN")
-                                                // All other requests must be authenticated
+
+                                                // Les membres (clients ou admins) peuvent accéder à leur profil.
+                                                .requestMatchers("/users/me/**", "/profil")
+                                                .hasAnyAuthority("ROLE_CLIENT", "ROLE_ADMIN")
+
+                                                // Toute autre requête doit être authentifiée.
                                                 .anyRequest().authenticated())
 
-                                // Configure form-based login
+                                // Configuration du processus de connexion.
                                 .formLogin(form -> form
-                                                .loginPage("/login")
-                                                .loginProcessingUrl("/login")
+                                                .loginPage("/login") // Utilise notre page de login personnalisée servie
+                                                                     // par AuthController.
+                                                .loginProcessingUrl("/login") // L'URL à laquelle le formulaire doit
+                                                                              // être soumis.
                                                 .defaultSuccessUrl("/profil", true)
-                                                .failureUrl("/login?error=true")
-                                                .permitAll())
+                                                .failureHandler((request, response, exception) -> {
+                                                        // En cas d'échec, on envoie un statut 401 Unauthorized avec un
+                                                        // message plus clair.
+                                                        String errorMessage = "Identifiants invalides ou erreur interne.";
+                                                        if (exception instanceof org.springframework.security.authentication.BadCredentialsException) {
+                                                                errorMessage = "Email ou mot de passe incorrect.";
+                                                        } else if (exception instanceof org.springframework.security.authentication.LockedException) {
+                                                                errorMessage = "Ce compte est verrouillé.";
+                                                        } else if (exception instanceof org.springframework.security.authentication.DisabledException) {
+                                                                errorMessage = "Ce compte est désactivé.";
+                                                        }
 
-                                // Configure logout using the recommended POST method
+                                                        // Log de l'exception côté serveur pour un débogage complet
+                                                        System.err.println("Échec de l'authentification: "
+                                                                        + exception.getMessage());
+                                                        exception.printStackTrace();
+
+                                                        response.sendError(HttpStatus.UNAUTHORIZED.value(),
+                                                                        errorMessage);
+                                                }))
+
+                                // Configuration du processus de déconnexion.
                                 .logout(logout -> logout
-                                                .logoutUrl("/logout") // The URL that triggers logout
-                                                .logoutSuccessUrl("/login?logout=true")
+                                                .logoutUrl("/logout")
+                                                .logoutSuccessHandler((request, response, authentication) -> {
+                                                        response.setStatus(HttpStatus.OK.value());
+                                                })
                                                 .invalidateHttpSession(true)
-                                                .deleteCookies("JSESSIONID")
-                                                .permitAll())
+                                                .deleteCookies("JSESSIONID"))
 
-                                // Configure exception handling for access denied
+                                // Configuration de la gestion des exceptions.
                                 .exceptionHandling(exceptions -> exceptions
-                                                .accessDeniedPage("/access-denied"));
+                                                // Pour les accès non autorisés, on renvoie un statut 403 Forbidden.
+                                                .accessDeniedPage("/access-denied")
+                                                // Pour les accès non authentifiés, au lieu de rediriger,
+                                                // on envoie un statut 401. C'est mieux pour les appels AJAX.
+                                                .authenticationEntryPoint(
+                                                                new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)));
 
                 return http.build();
         }
