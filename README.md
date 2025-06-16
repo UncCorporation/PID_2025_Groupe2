@@ -7,6 +7,9 @@
 - ✅ Tâche terminée
 - ❌ Tâche non terminée
 ---  
+## idées de suppléments s'il y a le temps 💡 :
+- Affichage custom IA de ton produit => voir son exemple avec gemini pour personnalisé des images : https://www.youtube.com/watch?v=HJa8G6e1oRw
+
 ## Visiteur / Navigation 
 
 ### US1 - Affichage des catégories ✅
@@ -37,7 +40,7 @@ Les détails affichés sont :
 
 ## Gestion du compte
 
-### US4 - Connexion ❌ 
+### US4 - Connexion ✅
 **En tant que** visiteur,  
 **Je peux** me connecter en indiquant mon email et mon mot de passe
 
@@ -47,7 +50,7 @@ Les détails affichés sont :
 - Un message indique un éventuel échec de l'authentification
 - Une fois connecté, l'application affiche "Bienvenue, <prénom de l'membre>" sur toutes les pages
 
-### US5 - Inscription ❌ 
+### US5 - Inscription ✅ 
 **En tant que** visiteur anonyme,  
 **Je peux** m'inscrire comme utilisateur enregistré
 
@@ -59,7 +62,7 @@ Les détails affichés sont :
 - Affichage "Bienvenue, <prénom du membre>" après connexion
 - Conservation du panier si compte créé pendant l'achat
 
-### US6 - Modification du profil ❌ 
+### US6 - Modification du profil ✅ 
 **En tant que** membre,  
 **Je peux** modifier mes informations personnelles
 
@@ -69,7 +72,7 @@ Les détails affichés sont :
 - Unicité du courriel
 - Message d'erreur en cas d'échec
 
-### US7 - Déconnexion ❌ 
+### US7 - Déconnexion ✅
 **En tant que** membre,  
 **Je peux** me déconnecter pour redevenir visiteur
 

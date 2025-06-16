@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Connexion</title>
+    <!-- Mettez ici votre lien vers Bootstrap CSS si vous l'utilisez -->
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+</head>
+<body>
+<div class="container">
+    <h2>Page de Connexion</h2>
+    <p>TRACE: Si vous voyez cette page, le contrôleur et la vue fonctionnent.</p>
+
+    <!-- Affiche un message d'erreur si la connexion échoue -->
+    <div th:if="${param.error}" class="alert alert-danger">
+        Email ou mot de passe invalide.
+    </div>
+
+    <!-- Affiche un message si l'utilisateur vient de se déconnecter -->
+    <div th:if="${param.logout}" class="alert alert-success">
+        Vous avez été déconnecté avec succès.
+    </div>
+
+    <form th:action="@{/login}" method="post">
+        <div>
+            <label for="username">Email:</label>
+            <input type="text" id="username" name="username" autofocus="autofocus" required>
+        </div>
+        <div>
+            <label for="password">Mot de passe:</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+        
+        <!-- Le jeton CSRF est ajouté automatiquement par Thymeleaf et Spring Security -->
+        
+        <button type="submit">Se connecter</button>
+    </form>
+    
+    <a th:href="@{/register}">Créer un compte</a>
+</div>
+</body>
+</html> 
