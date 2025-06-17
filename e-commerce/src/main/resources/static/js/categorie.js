@@ -1,10 +1,13 @@
 document.addEventListener("DOMContentLoaded", function() {
     getCategories();
+    loadCategoriesForSearch();
     getProducts();
     const allCatecories = document.getElementById('all-cat');
-    allCatecories.addEventListener("click", function(){
-      getProducts();
-    });
+    if (allCatecories) {
+        allCatecories.addEventListener("click", function(){
+            getProducts();
+        });
+    }
 });
 
 const renderSingleProduct = (id) =>{
@@ -217,4 +220,39 @@ const getProducts = () => {
         const productList = document.getElementById('product-list');
         productList.innerHTML = '<p>Error loading products. Please try again later.</p>';
     });
+}
+
+function loadCategoriesForSearch() {
+    const categorieSelect = document.getElementById('categorie-select-search');
+    if (!categorieSelect) {
+        return;
+    }
+
+    categorieSelect.addEventListener('change', function() {
+        const selectedCategoryId = this.value;
+        if (selectedCategoryId) {
+            categorieListner(selectedCategoryId);
+        } else {
+            getProducts();
+        }
+    });
+
+    fetch('/api/categories')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(categories => {
+            categories.forEach(categorie => {
+                const option = document.createElement('option');
+                option.value = categorie.id;
+                option.textContent = categorie.nomCategorie;
+                categorieSelect.appendChild(option);
+            });
+        })
+        .catch(error => {
+            console.error('Erreur de chargement des catégories pour la recherche:', error);
+        });
 }

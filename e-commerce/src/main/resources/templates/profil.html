@@ -4,132 +4,153 @@
 <head>
     <meta charset="UTF-8">
     <title>Mon Profil</title>
-    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/styles.css}">
+    <style>
+        .profile-body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 20px;
+            padding-bottom: 40px;
+            background-color: #f5f5f5;
+        }
+        .profile-container{
+            width: 100%;
+            max-width: 960px; /* Augmenté pour mieux contenir les sections côte à côte */
+            padding: 15px;
+            margin: 0 auto;
+        }
+    </style>
 </head>
-<body>
-<div class="container">
-    <h2>Mon Profil</h2>
+<body class="profile-body">
+    <!-- Le header est maintenant en dehors du conteneur principal pour ne pas être affecté par le flexbox -->
+    <div th:replace="~{fragments/header :: header}" style="width: 100%;"></div>
+    <!-- Injection du bandeau de bienvenue -->
+    <div th:replace="~{fragments/welcome :: welcome}"></div>
 
-    <h4>Bienvenue, <input type="text" class="form-control"
-        th:value="${profile?.nom ?: ''}" name="nom"> !</h4>
-    
-    <!-- Section des informations personnelles -->
-    <div class="card mt-4">
-        <div class="card-header">
-            <h5>Mes informations personnelles</h5>
+<div class="profile-container">
+    <h2 class="text-center">Mon Profil</h2>
+    <div class="row">
+        <!-- Colonne pour les informations personnelles et l'adresse -->
+        <div class="col-md-6">
+            <!-- Section des informations personnelles -->
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5>Mes informations personnelles</h5>
+                </div>
+                <div class="card-body">
+                    <form th:action="@{/users/me/update}" method="post">
+                        <!-- Messages de succès/erreur pour le profil -->
+                        <div th:if="${success_profile}" class="alert alert-success" th:text="${success_profile}"></div>
+                        <div th:if="${errors_profile}" class="alert alert-danger">
+                            <ul class="mb-0">
+                                <li th:each="err : ${errors_profile}" th:text="${err}"></li>
+                            </ul>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="mb-3 row">
+                            <label class="col-sm-3 col-form-label">Email</label>
+                            <div class="col-sm-9">
+                                <input type="email" class="form-control"
+                                       th:value="${profile?.email ?: 'Information non disponible'}"
+                                       readonly>
+                            </div>
+                        </div>
+
+                        <!-- Nom -->
+                        <div class="mb-3 row">
+                            <label class="col-sm-3 col-form-label">Nom</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control"
+                                       th:value="${profile?.nom ?: ''}" name="nom">
+                            </div>
+                        </div>
+
+                        <!-- Prénom -->
+                        <div class="mb-3 row">
+                            <label class="col-sm-3 col-form-label">Prénom</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control"
+                                       th:value="${profile?.prenom ?: ''}" name="prenom">
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <button type="submit" class="btn btn-primary">Enregistrer</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Adresses (0..n) -->
+            <div class="card mt-4" th:if="${#lists.isEmpty(profile.adresses)}">
+                <div class="card-body">
+                    <p class="mb-0 text-muted">Aucune adresse enregistrée.</p>
+                </div>
+            </div>
+
+            <div class="card mt-4" th:if="${!#lists.isEmpty(profile.adresses)}">
+                <div class="card-header"><h5>Mes adresses</h5></div>
+                <ul class="list-group list-group-flush"
+                    th:each="adr, stat : ${profile.adresses}">
+                    <li class="list-group-item">
+                        <strong th:text="${adr.libelle ?: 'Adresse'}"></strong><br/>
+                        <span th:text="${adr.rue}"></span><br/>
+                        <span th:text="${adr.codePostal + ' ' + adr.ville}"></span><br/>
+                        <span th:text="${adr.pays}"></span>
+                    </li>
+                </ul>
+            </div>
         </div>
-        <div class="card-body">
-            <form th:action="@{/users/me/update}" method="post">
-                <!-- Messages de succès/erreur pour le profil -->
-                <div th:if="${success_profile}" class="alert alert-success" th:text="${success_profile}"></div>
-                <div th:if="${errors_profile}" class="alert alert-danger">
-                    <ul class="mb-0">
-                        <li th:each="err : ${errors_profile}" th:text="${err}"></li>
-                    </ul>
-                </div>
 
-                <!-- Email -->
-                <div class="mb-3 row">
-                    <label class="col-sm-2 col-form-label">Email</label>
-                    <div class="col-sm-10">
-                        <input type="email" class="form-control"
-                               th:value="${profile?.email ?: 'Information non disponible'}"
-                               readonly>
-                    </div>
+        <!-- Colonne pour le changement de mot de passe -->
+        <div class="col-md-6">
+            <!-- Section pour changer le mot de passe -->
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5>Changer mon mot de passe</h5>
                 </div>
+                <div class="card-body">
+                    <form th:action="@{/users/me/change-password}" method="post">
+                        <!-- Messages de succès/erreur pour le mot de passe -->
+                        <div th:if="${success_password}" class="alert alert-success" th:text="${success_password}"></div>
+                        <div th:if="${errors_password}" class="alert alert-danger">
+                            <ul class="mb-0">
+                                <li th:each="err : ${errors_password}" th:text="${err}"></li>
+                            </ul>
+                        </div>
 
-                <!-- Nom -->
-                <div class="mb-3 row">
-                    <label class="col-sm-2 col-form-label">Nom</label>
-                    <div class="col-sm-10">
-                        <input type="text" class="form-control"
-                               th:value="${profile?.nom ?: ''}" name="nom">
-                    </div>
+                        <div class="mb-3">
+                            <label for="currentPassword" class="form-label">Mot de passe actuel</label>
+                            <input type="password" class="form-control" id="currentPassword" name="currentPassword" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="newPassword" class="form-label">Nouveau mot de passe</label>
+                            <input type="password" class="form-control" id="newPassword" name="newPassword" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="confirmPassword" class="form-label">Confirmer le mot de passe</label>
+                            <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
+                        </div>
+                        
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <button type="submit" class="btn btn-warning">Changer le mot de passe</button>
+                        </div>
+                    </form>
                 </div>
-
-                <!-- Prénom -->
-                <div class="mb-3 row">
-                    <label class="col-sm-2 col-form-label">Prénom</label>
-                    <div class="col-sm-10">
-                        <input type="text" class="form-control"
-                               th:value="${profile?.prenom ?: ''}" name="prenom">
-                    </div>
-                </div>
-
-                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                    <button type="submit" class="btn btn-primary">Enregistrer</button>
-                </div>
-            </form>
+            </div>
         </div>
     </div>
-
-    <!-- Adresses (0..n) -->
-    <div class="card mt-4" th:if="${#lists.isEmpty(profile.adresses)}">
-        <div class="card-body">
-            <p class="mb-0 text-muted">Aucune adresse enregistrée.</p>
-        </div>
-    </div>
-
-    <div class="card mt-4" th:if="${!#lists.isEmpty(profile.adresses)}">
-        <div class="card-header"><h5>Mes adresses</h5></div>
-        <ul class="list-group list-group-flush"
-            th:each="adr, stat : ${profile.adresses}">
-            <li class="list-group-item">
-                <strong th:text="${adr.libelle ?: 'Adresse'}"></strong><br/>
-                <span th:text="${adr.rue}"></span><br/>
-                <span th:text="${adr.codePostal + ' ' + adr.ville}"></span><br/>
-                <span th:text="${adr.pays}"></span>
-            </li>
-        </ul>
-    </div>
-    
-    <!-- Section pour changer le mot de passe -->
-    <div class="card mt-4">
-        <div class="card-header">
-            <h5>Changer mon mot de passe</h5>
-        </div>
-        <div class="card-body">
-            <form th:action="@{/users/me/change-password}" method="post">
-                <!-- Messages de succès/erreur pour le mot de passe -->
-                <div th:if="${success_password}" class="alert alert-success" th:text="${success_password}"></div>
-                <div th:if="${errors_password}" class="alert alert-danger">
-                    <ul class="mb-0">
-                        <li th:each="err : ${errors_password}" th:text="${err}"></li>
-                    </ul>
-                </div>
-
-                <div class="mb-3 row">
-                    <label for="currentPassword" class="col-sm-3 col-form-label">Mot de passe actuel</label>
-                    <div class="col-sm-9">
-                        <input type="password" class="form-control" id="currentPassword" name="currentPassword" required>
-                    </div>
-                </div>
-                
-                <div class="mb-3 row">
-                    <label for="newPassword" class="col-sm-3 col-form-label">Nouveau mot de passe</label>
-                    <div class="col-sm-9">
-                        <input type="password" class="form-control" id="newPassword" name="newPassword" required>
-                    </div>
-                </div>
-                
-                <div class="mb-3 row">
-                    <label for="confirmPassword" class="col-sm-3 col-form-label">Confirmer le mot de passe</label>
-                    <div class="col-sm-9">
-                        <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
-                    </div>
-                </div>
-                
-                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                    <button type="submit" class="btn btn-warning">Changer le mot de passe</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Le formulaire de déconnexion -->
-    <form th:action="@{/logout}" method="post" class="mt-4 mb-5">
-        <button type="submit" class="btn btn-danger">Se déconnecter</button>
-    </form>
 </div>
+
+<!-- Le formulaire de déconnexion est maintenant dans le header -->
+<!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Core theme JS-->
+<script th:src="@{/js/categorie.js}"></script>
 </body>
 </html>

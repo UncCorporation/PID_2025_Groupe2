@@ -26,14 +26,23 @@
             <label for="username">Email:</label>
             <input type="text" id="username" name="username" autofocus="autofocus" required>
         </div>
-        <div>
-            <label for="password">Mot de passe:</label>
-            <input type="password" id="password" name="password" required>
+        
+        <div class="form-label-group">
+            <input type="text" id="username" name="username" class="form-control" placeholder="Email" required autofocus>
         </div>
         
-        <!-- Le jeton CSRF est ajouté automatiquement par Thymeleaf et Spring Security -->
+        <div class="form-label-group">
+            <input type="password" id="password" name="password" class="form-control" placeholder="Mot de passe" required>
+        </div>
+
+        <!-- Ajout du jeton CSRF, essentiel pour la sécurité -->
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
         
-        <button type="submit">Se connecter</button>
+        <button type="submit" class="btn btn-lg btn-primary btn-block">Se connecter</button>
+
+        <div class="text-center mt-3">
+            <a th:href="@{/register}">Créer un compte</a>
+        </div>
     </form>
     
     <a th:href="@{/register}">Créer un compte</a>

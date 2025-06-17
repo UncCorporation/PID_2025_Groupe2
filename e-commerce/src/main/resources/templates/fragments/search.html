@@ -1,0 +1,43 @@
+<div th:fragment="search">
+    <style>
+        .search-card {
+            background-color: #ffffff;
+            border-radius: 0.375rem; /* 6px */
+            padding: 1.5rem;
+            max-width: 500px;
+            margin: 0 auto;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        }
+    </style>
+    <div class="search-card">
+        <h5 class="text-dark text-center mb-3">Filtrer par catégorie</h5>
+        <form th:action="@{/}" method="get" class="d-flex">
+            <select class="form-select" name="categorieId" id="categorie-select-search" aria-label="Sélectionner une catégorie">
+                <option value="" selected>Toutes les catégories</option>
+                <!-- Options chargées par JS -->
+            </select>
+            <!-- Le bouton de recherche a été retiré, le filtrage est automatique -->
+        </form>
+    </div>
+</div>
+
+<!-- Vous aurez besoin d'un script pour charger les catégories, par exemple dans categorie.js -->
+<script th:inline="javascript">
+    document.addEventListener('DOMContentLoaded', function() {
+        // S'assure que le script s'exécute uniquement si l'élément existe
+        const categorieSelect = document.getElementById('categorie-select-search');
+        if (categorieSelect) {
+            fetch('/api/categories')
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(categorie => {
+                        const option = document.createElement('option');
+                        option.value = categorie.id;
+                        option.textContent = categorie.name;
+                        categorieSelect.appendChild(option);
+                    });
+                })
+                .catch(error => console.error('Erreur de chargement des catégories:', error));
+        }
+    });
+</script>

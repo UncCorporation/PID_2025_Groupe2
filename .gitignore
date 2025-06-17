@@ -56,3 +56,4 @@ application-dev.properties # Si chaque dev a un "dev" mais avec des configs diff
 config/override.properties
 secrets.properties
 *.pdf
+*.mdc

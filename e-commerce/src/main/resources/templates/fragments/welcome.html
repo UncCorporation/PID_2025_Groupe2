@@ -1,0 +1,7 @@
+<div th:fragment="welcome">
+    <!-- Ce bandeau s'affiche uniquement si la variable "currentPrenom" existe -->
+    <div th:if="${currentPrenom}"
+         class="alert alert-success text-center mb-0 rounded-0 border-0 py-2">
+        Bienvenue, <span th:text="${currentPrenom}" style="font-weight: 500;"></span> !
+    </div>
+</div> 

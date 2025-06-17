@@ -46,7 +46,7 @@ public class SecurityConfig {
                                                                 "/access-denied",
                                                                 "/api/produits/**", "/api/categories/**",
                                                                 "/css/**", "/js/**", "/images/**",
-                                                                "/register")
+                                                                "/register", "/conditions-generales")
                                                 .permitAll()
 
                                                 // Les membres (clients ou admins) peuvent accéder à leur profil.
@@ -63,44 +63,24 @@ public class SecurityConfig {
                                                 .loginProcessingUrl("/login") // L'URL à laquelle le formulaire doit
                                                                               // être soumis.
                                                 .defaultSuccessUrl("/profil", true)
-                                                .failureHandler((request, response, exception) -> {
-                                                        // En cas d'échec, on envoie un statut 401 Unauthorized avec un
-                                                        // message plus clair.
-                                                        String errorMessage = "Identifiants invalides ou erreur interne.";
-                                                        if (exception instanceof org.springframework.security.authentication.BadCredentialsException) {
-                                                                errorMessage = "Email ou mot de passe incorrect.";
-                                                        } else if (exception instanceof org.springframework.security.authentication.LockedException) {
-                                                                errorMessage = "Ce compte est verrouillé.";
-                                                        } else if (exception instanceof org.springframework.security.authentication.DisabledException) {
-                                                                errorMessage = "Ce compte est désactivé.";
-                                                        }
-
-                                                        // Log de l'exception côté serveur pour un débogage complet
-                                                        System.err.println("Échec de l'authentification: "
-                                                                        + exception.getMessage());
-                                                        exception.printStackTrace();
-
-                                                        response.sendError(HttpStatus.UNAUTHORIZED.value(),
-                                                                        errorMessage);
-                                                }))
+                                                // Redirige vers /login?error=true en cas d'échec.
+                                                // C'est la méthode standard pour les formulaires web.
+                                                .failureUrl("/login?error=true"))
 
                                 // Configuration du processus de déconnexion.
                                 .logout(logout -> logout
                                                 .logoutUrl("/logout")
-                                                .logoutSuccessHandler((request, response, authentication) -> {
-                                                        response.setStatus(HttpStatus.OK.value());
-                                                })
+                                                .logoutSuccessUrl("/")
                                                 .invalidateHttpSession(true)
                                                 .deleteCookies("JSESSIONID"))
 
                                 // Configuration de la gestion des exceptions.
                                 .exceptionHandling(exceptions -> exceptions
                                                 // Pour les accès non autorisés, on renvoie un statut 403 Forbidden.
-                                                .accessDeniedPage("/access-denied")
-                                                // Pour les accès non authentifiés, au lieu de rediriger,
-                                                // on envoie un statut 401. C'est mieux pour les appels AJAX.
-                                                .authenticationEntryPoint(
-                                                                new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)));
+                                                // Le point d'entrée d'authentification par défaut (redirection vers la
+                                                // page de login)
+                                                // est maintenant utilisé, ce qui corrige le flux de navigation.
+                                                .accessDeniedPage("/access-denied"));
 
                 return http.build();
         }

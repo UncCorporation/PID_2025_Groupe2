@@ -1,0 +1,59 @@
+/* Styles pour les pages de contenu statique (CGU, etc.) */
+
+body {
+    background-color: #f8f9fa; /* Fond légèrement gris */
+}
+
+.main-content {
+    padding-top: 2rem;
+    padding-bottom: 3rem;
+}
+
+.main-content .container {
+    max-width: 960px; /* Limite la largeur pour une meilleure lisibilité */
+    background-color: #ffffff; /* Fond blanc pour le contenu */
+    padding: 2rem 3rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+.main-content h1 {
+    color: #343a40;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.main-content h2 {
+    color: #495057;
+    margin-top: 2.5rem; /* Espace avant chaque nouvelle section */
+    margin-bottom: 1rem;
+}
+
+.main-content p, .main-content ul {
+    line-height: 1.7; /* Améliore la lisibilité des paragraphes */
+    text-align: justify;
+    color: #212529;
+}
+
+.main-content ul {
+    padding-left: 2rem;
+}
+
+.main-content strong {
+    color: #000;
+}
+
+.main-content a {
+    color: #0d6efd; /* Couleur de lien Bootstrap standard */
+    text-decoration: none;
+}
+
+.main-content a:hover {
+    text-decoration: underline;
+}
+
+/* On s'assure que le footer est bien espacé */
+body > footer {
+    margin-top: 3rem;
+} 

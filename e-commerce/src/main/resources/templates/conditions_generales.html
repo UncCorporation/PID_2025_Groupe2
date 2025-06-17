@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Conditions Générales d'Utilisation</title>
+    <!-- Bootstrap icons-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link th:href="@{/css/styles.css}" rel="stylesheet" />
+    <!-- Page-specific CSS -->
+    <link rel="stylesheet" th:href="@{/css/static_page_style.css}">
+</head>
+<body>
+<header th:replace="~{fragments/header :: header}"></header>
+
+<main class="main-content">
+    <div class="container">
+        <h1>Conditions Générales d'Utilisation - Année 2025-2026</h1>
+        
+        <p><strong>Date de dernière mise à jour :</strong> 6 juin 2025</p>
+
+        <h2>Article 1 : Informations légales</h2>
+        <p>
+            Le présent site, accessible à l'URL T-shirt.com , est édité par :
+            <strong>T-Shirt Commerce</strong>, société de droit belge, domiciliée à l'adresse Avenue Gatti de Gamond 48, 1180 Uccle, Belgique.
+        </p>
+
+        <h2>Article 2 : Objet du site</h2>
+        <p>
+            Le site "T-Shirt Commerce" est un site vitrine destiné à présenter les produits et créations de la société. 
+            Les informations fournies sur ce site le sont à titre purement indicatif.
+        </p>
+
+        <h2>Article 3 : Nature des informations</h2>
+        <p>
+            Ce site est une vitrine et ne constitue en aucun cas une offre commerciale ou un engagement contractuel. 
+            Les produits, leurs descriptions, et leurs prix sont présentés à titre indicatif et sont susceptibles d'évoluer ou de changer sans préavis. 
+            T-Shirt Commerce ne saurait être tenu pour responsable des éventuelles erreurs ou omissions dans les informations diffusées.
+        </p>
+
+        <h2>Article 4 : Acceptation des conditions</h2>
+        <p>
+            L'utilisation de ce site implique l'acceptation pleine et entière des présentes conditions générales d'utilisation. 
+            En continuant votre navigation sur ce site, vous reconnaissez avoir lu, compris et accepté ces conditions.
+        </p>
+
+        <h2>Article 5 : Propriété intellectuelle</h2>
+        <p>
+            L'ensemble des éléments de ce site (textes, images, logos, designs) est la propriété exclusive de T-Shirt Commerce ou fait l'objet d'une autorisation d'utilisation. 
+            Toute reproduction, même partielle, est formellement interdite sans l'autorisation écrite de T-Shirt Commerce.
+        </p>
+
+        <h2>Article 6 : Limitation de responsabilité</h2>
+        <p>
+            T-Shirt Commerce ne pourra être tenu responsable des dommages directs ou indirects résultant de l'accès ou de l'utilisation de ce site. 
+            Cela inclut, sans s'y limiter, toute perte de données ou préjudice financier.
+        </p>
+
+        <h2>Article 7 : Droit applicable</h2>
+        <p>
+            Les présentes conditions générales sont soumises au droit belge. 
+            En cas de litige, les tribunaux de Bruxelles seront seuls compétents.
+        </p>
+
+        <h2>Article 8 : Protection des données personnelles (RGPD)</h2>
+        <p>
+            Dans le cadre de la création d'un compte ou d'une commande, T-Shirt Commerce
+            collecte et traite des <strong>données à caractère personnel</strong> telles
+            que : nom, prénom, adresse e-mail, adresse de livraison, numéro de téléphone,
+            adresse IP et historique de navigation.<br>
+            Ces traitements reposent :
+        </p>
+        <ul>
+            <li>sur l'exécution d'un contrat (gestion du compte et des commandes) ;</li>
+            <li>sur votre consentement (prospection commerciale) ;</li>
+            <li>sur nos obligations légales (facturation, lutte contre la fraude) ;</li>
+            <li>sur notre intérêt légitime (sécurisation du site, amélioration de l'expérience utilisateur).</li>
+        </ul>
+        <p>
+            Les données sont conservées <strong>3 ans</strong> à compter de votre
+            dernière activité (7 ans pour les pièces comptables). Elles sont hébergées
+            dans l'Union européenne et ne font l'objet d'aucun transfert hors UE, sauf
+            clauses contractuelles types ou décision d'adéquation de la Commission
+            européenne.
+        </p>
+
+        <h2>Article 9 : Droits des utilisateurs</h2>
+        <p>
+            Conformément au Règlement (UE) 2016/679 (RGPD) et à la loi belge du
+            30 juillet 2018, vous disposez des droits suivants : accès, rectification,
+            effacement, limitation, opposition, portabilité et retrait du consentement.
+            Pour les exercer, contactez-nous à <a href="mailto:dpo@tshirt-commerce.be">dpo@tshirt-commerce.be</a>.
+            Vous pouvez introduire une réclamation auprès de l'Autorité de Protection
+            des Données (Rue de la Presse 35, 1000 Bruxelles, <em>contact@apd-gba.be</em>).
+        </p>
+
+        <h2>Article 10 : Cookies</h2>
+        <p>
+            Le site utilise des cookies techniques et de mesure d'audience. Vous pouvez
+            les désactiver via la bannière de consentement ou les paramètres de votre
+            navigateur. Pour en savoir plus, consultez notre Politique Cookies.
+        </p>
+
+        <h2>Article 11 : Sécurité des données</h2>
+        <p>
+            Nous mettons en œuvre des mesures techniques et organisationnelles adaptées
+            (connexion HTTPS, mots de passe hachés BCrypt, sauvegardes chiffrées, contrôle
+            d'accès) afin de garantir la confidentialité, l'intégrité et la disponibilité
+            de vos données.
+        </p>
+
+        <h2>Article 12 : Modification des conditions</h2>
+        <p>
+            Les présentes conditions peuvent être mises à jour à tout moment ; l'utilisateur
+            sera informé par un avis sur le site. La version en vigueur est celle publiée
+            à la date de votre consultation.
+        </p>
+    </div>
+</main>
+
+<div th:replace="fragments/footer :: footer"></div>
+</body>
+</html>

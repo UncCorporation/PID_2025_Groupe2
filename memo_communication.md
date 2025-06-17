@@ -4,6 +4,8 @@
 - Login pour le compte Admin : admin@tshirt.com - adminPsw123!
 - Login pour un compte client classique : user@tshirt.com - sUperUserPsw123 
 
+
+- commande utile : npx @agentdeskai/browser-tools-server@1.2.0
 ---
 
 ## Exemple d'un cycle complet dans notre application (avec un ajout au panier)
